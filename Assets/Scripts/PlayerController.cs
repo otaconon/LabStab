@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Unity.Netcode;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour {
@@ -35,8 +35,9 @@ public class PlayerController : MonoBehaviour {
 
     private void OnEnable() => _input.Enable();
     private void OnDisable() => _input.Disable();
-    
-    void Start () {
+
+    private void Start () {
+        DontDestroyOnLoad(gameObject);
         Cursor.lockState = CursorLockMode.Locked;
 
         _controller = GetComponent<CharacterController>();
