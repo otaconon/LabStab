@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour {
+public class PlayerController : NetworkBehaviour {
     [Header("References")]
     public Transform cameraTransform;
 
@@ -25,26 +25,65 @@ public class PlayerController : MonoBehaviour {
     private Vector3 _velocity;
     
     private void Awake() {
+        _controller = GetComponent<CharacterController>();
+        _controller.enableOverlapRecovery = true;
+        
         _input = new PlayerControls();
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         _input.Gameplay.Jump.performed += context => Jump();
     }
 
-    private void OnEnable() => _input.Enable();
-    private void OnDisable() => _input.Disable();
+    private void OnEnable() {
+        if (IsSpawned && IsOwner)
+            _input.Enable();
+    }
+
+    private void OnDisable() {
+        _input.Disable();
+    }
+    
+    public override void OnNetworkDespawn() {
+        _input.Disable();
+    }
 
     private void Start () {
-        DontDestroyOnLoad(gameObject);
         Cursor.lockState = CursorLockMode.Locked;
+    }
+    
+    public override void OnNetworkSpawn() {
+        if (IsOwner) {
+            _input.Enable();
+            
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
 
-        _controller = GetComponent<CharacterController>();
-        _controller.enableOverlapRecovery = true;
+            if (cameraTransform == null) {
+                return;
+            }
+            
+            var cam = cameraTransform.GetComponent<Camera>();
+            if(cam) cam.enabled = true;
+            var listener = cameraTransform.GetComponent<AudioListener>();
+
+            if (listener) {
+                listener.enabled = true;
+            }
+        } else {
+            if(cameraTransform != null) {
+                var cam = cameraTransform.GetComponent<Camera>();
+                if(cam) cam.enabled = false;
+                var listener = cameraTransform.GetComponent<AudioListener>();
+                if(listener) listener.enabled = false;
+            }
+            
+            _input.Disable(); 
+        }
     }
 
     private void Update() {
+        if (!IsOwner) {
+            return;
+        }
+        
         _moveInput = _input.Gameplay.Move.ReadValue<Vector2>();
         _lookInput = _input.Gameplay.Look.ReadValue<Vector2>();
         HandleMovement();
@@ -56,6 +95,8 @@ public class PlayerController : MonoBehaviour {
         _smoothY.x = Mathf.Lerp(_smoothY.x, md.x, 1f / smoothing);
         _smoothY.y = Mathf.Lerp(_smoothY.y, md.y, 1f / smoothing);
         _mouseLook += _smoothY;
+        
+        _mouseLook.y = Mathf.Clamp(_mouseLook.y, -90f, 90f);
 
         cameraTransform.localRotation = Quaternion.AngleAxis(-_mouseLook.y, Vector3.right);
         transform.localRotation = Quaternion.AngleAxis(_mouseLook.x, transform.up);
@@ -69,6 +110,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Jump() {
+        if (!IsOwner) return;
         Debug.Log("Jump!");
     }
 }
