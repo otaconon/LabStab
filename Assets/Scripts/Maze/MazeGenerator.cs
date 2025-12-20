@@ -10,6 +10,8 @@ public class MazeGenerator : MonoBehaviour {
     [Header("Settings")]
     public float scale = 1f;
     public float wallHeight = 2f;
+    public int resX = 16;
+    public int resY = 16;
     
     private Texture2D _mazeTexture;
     private List<Vector3> _vertices;
@@ -18,7 +20,7 @@ public class MazeGenerator : MonoBehaviour {
     private int _vertexCount;
     
     public void GenerateMaze() {
-        _mazeTexture = GenerateMazeTexture(64, 64);
+        _mazeTexture = GenerateMazeTexture(resX, resY);
 
         _vertices = new List<Vector3>();
         _triangles = new List<int>();
