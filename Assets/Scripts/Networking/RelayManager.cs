@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -10,10 +11,15 @@ using UnityEngine;
 namespace Networking {
     public class RelayManager : MonoBehaviour {
         private async void Start() {
-            await UnityServices.InitializeAsync();
+            try {
+                await UnityServices.InitializeAsync();
 
-            if (!AuthenticationService.Instance.IsSignedIn) {
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                if (!AuthenticationService.Instance.IsSignedIn) {
+                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                }
+            }
+            catch (Exception e) {
+                Debug.LogError(e);
             }
         }
 

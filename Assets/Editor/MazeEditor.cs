@@ -1,20 +1,20 @@
+using Maze;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor {
-    [CustomEditor(typeof(MazeGenerator))]
-    public class MazeEditor : UnityEditor.Editor
-    {
+    [CustomEditor(typeof(MazeRenderer))]
+    public class MazeEditor : UnityEditor.Editor {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-            var generator = (MazeGenerator)target;
-
+            var mazeRenderer = (MazeRenderer)target;
+            
             GUILayout.Space(10);
             
             if (GUILayout.Button("Generate Maze Mesh"))
             {
-                generator.GenerateMaze();
+                mazeRenderer.RenderMaze();
             }
         }
     }
