@@ -31,7 +31,7 @@ namespace Maze {
             for (var x = 0; x < mazeTexture.width; x++)
             {
                 for (var z = 0; z < mazeTexture.height; z++) {
-                    if (!(mazeTexture.GetPixel(x, z).grayscale > 0.5f)) continue;
+                    if (mazeTexture.GetPixel(x, z).grayscale > 0.5f) continue;
                 
                     var pos = new Vector3(x * scale, 0, z * scale);
                     CreateBlock(x, z, pos);
@@ -79,7 +79,7 @@ namespace Maze {
             if (x < 0 || x >= _mazeTexture.width || z < 0 || z >= _mazeTexture.height)
                 return true;
 
-            return _mazeTexture.GetPixel(x, z).grayscale < 0.5f;
+            return _mazeTexture.GetPixel(x, z).grayscale > 0.5f;
         }
 
         // Generates face in clockwise order
