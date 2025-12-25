@@ -4,9 +4,10 @@ using UnityEngine;
 namespace Maze {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
     public class MazeMesh : MonoBehaviour {
+        [SerializeField] private float scale;
+        [SerializeField] private float height;
+        
         private Texture2D _mazeTexture;
-        private float _scale;
-        private float _height;
     
         private List<Vector3> _vertices;
         private List<int> _triangles;
@@ -16,12 +17,8 @@ namespace Maze {
         private MeshFilter _meshFilter;
         private MeshCollider _meshCollider;
 
-        public void GenerateMesh(Texture2D mazeTexture, float scale, float height) {
-            
-            
+        public void GenerateMesh(Texture2D mazeTexture) {
             _mazeTexture = mazeTexture;
-            _scale = scale;
-            _height = height;
             
             _vertices = new List<Vector3>();
             _triangles = new List<int>();
@@ -55,11 +52,11 @@ namespace Maze {
         }
 
         private void CreateBlock(int x, int z, Vector3 pos) {
-            AddFace(pos + Vector3.up * _height, Vector3.forward, Vector3.right, false, false);
+            AddFace(pos + Vector3.up * height, Vector3.forward, Vector3.right, false, false);
 
             // Front Face
             if (IsGap(x, z + 1))
-                AddFace(pos + Vector3.forward * _scale, Vector3.up, Vector3.right, true, true);
+                AddFace(pos + Vector3.forward * scale, Vector3.up, Vector3.right, true, true);
 
             // Back Face
             if (IsGap(x, z - 1))
@@ -67,7 +64,7 @@ namespace Maze {
 
             // Right Face
             if (IsGap(x + 1, z))
-                AddFace(pos + Vector3.right * _scale, Vector3.up, Vector3.forward, true, false);
+                AddFace(pos + Vector3.right * scale, Vector3.up, Vector3.forward, true, false);
 
             // Left Face
             if (IsGap(x - 1, z))
@@ -84,8 +81,8 @@ namespace Maze {
 
         // Generates face in clockwise order
         private void AddFace(Vector3 corner, Vector3 upDir, Vector3 rightDir, bool isSideWall, bool flip) {
-            Vector3 u = rightDir * _scale;
-            Vector3 v = isSideWall ? upDir * _height : upDir * _scale;
+            Vector3 u = rightDir * scale;
+            Vector3 v = isSideWall ? upDir * height : upDir * scale;
 
             _vertices.Add(corner);
             _vertices.Add(corner + v);

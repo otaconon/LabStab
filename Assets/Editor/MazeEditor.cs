@@ -12,7 +12,7 @@ namespace Editor {
             
             GUILayout.Space(10);
             
-            if (GUILayout.Button("Generate Maze Mesh"))
+            if (GUILayout.Button("Render Maze Mesh"))
             {
                 mazeRenderer.RenderMaze();
             }
