@@ -1,8 +1,5 @@
-using Input;
 using Managers;
-using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UserInterface {
@@ -11,25 +8,26 @@ namespace UserInterface {
         [SerializeField] private Button _resumeButton;
         [SerializeField] private Button _leaveButton;
 
-        private void Awake() {
-            SystemInputHandler.Instance.OnPausePressed += OnPause;
+        private void Start() {
+            _resumeButton.onClick.AddListener(Resume);
+            _leaveButton.onClick.AddListener(Leave);
+            
+            GameManager.Instance.OnPauseStateChanged += OnPause;
             gameObject.SetActive(false);
         }
 
-        private void Start() {
-            _resumeButton.onClick.AddListener(() => {
-                gameObject.SetActive(false);
-                GameManager.Instance.TogglePause();
-            }); 
-            
-            _leaveButton.onClick.AddListener(() => {
-                NetworkManager.Singleton.Shutdown();
-            });
+        private void Resume() {
+            gameObject.SetActive(false);
+            GameManager.Instance.TogglePause();
         }
 
-        private void OnPause() {
-            gameObject.SetActive(true);
-            GameManager.Instance.TogglePause();
+        private void Leave() {
+            gameObject.SetActive(false);
+            GameManager.Instance.LeaveGame();
+        }
+
+        private void OnPause(bool isPaused) {
+            gameObject.SetActive(isPaused);
         }
     }
 }

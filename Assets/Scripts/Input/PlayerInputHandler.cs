@@ -1,8 +1,4 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace Input {
     public class PlayerInputHandler : MonoBehaviour {
