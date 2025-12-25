@@ -1,23 +1,33 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 namespace Input {
-    public class InputHandler : MonoBehaviour
-    {
+    public class PlayerInputHandler : MonoBehaviour {
         private PlayerActions _playerActions;
 
         public void Enable() {
-            _playerActions.Enable(); 
+            _playerActions.Enable();
+        }
+
+        public void EnableGameplay() {
+            _playerActions.Gameplay.Enable(); 
         }
 
         public void Disable() {
-            _playerActions.Disable(); 
+            _playerActions.Disable();
+        }
+
+        public void DisableGameplay() {
+            _playerActions.Gameplay.Disable(); 
         }
 
         private void Awake() {
             _playerActions = new PlayerActions();
         }
-        
+
         private bool CanProcessInput() {
             return Cursor.lockState == CursorLockMode.Locked;
         }
@@ -28,10 +38,10 @@ namespace Input {
 
             var input = _playerActions.Gameplay.Move.ReadValue<Vector2>();
             var move = new Vector3(input.x, 0f, input.y);
-             
+
             return Vector3.ClampMagnitude(move, 1f);
         }
-        
+
         public Vector3 GetLookInput() {
             if (!CanProcessInput())
                 return Vector2.zero;

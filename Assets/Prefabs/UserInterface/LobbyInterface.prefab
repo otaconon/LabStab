@@ -1038,10 +1038,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58fb2752dee130498b2f721bb36eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkUI
-  hostButton: {fileID: 6036209444401194865}
-  clientButton: {fileID: 6966702576161131397}
-  joinCodeInput: {fileID: 7090320152096923512}
-  codeDisplay: {fileID: 4346995119508742680}
+  _hostButton: {fileID: 6036209444401194865}
+  _clientButton: {fileID: 6966702576161131397}
+  _joinCodeInput: {fileID: 7090320152096923512}
+  _codeDisplay: {fileID: 4346995119508742680}
 --- !u!1 &7942842402729543155
 GameObject:
   m_ObjectHideFlags: 0

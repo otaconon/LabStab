@@ -3,20 +3,20 @@ using Unity.Netcode;
 using UnityEngine;
 
 namespace Player {
-    [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler))]
     public class PlayerController : NetworkBehaviour {
         [Header("References")]
-        [SerializeField] private Transform cameraTransform;
-        [SerializeField] private InputHandler inputHandler;
+        [SerializeField] private Transform _cameraTransform;
 
         [Header("Movement")]
-        public float jumpForce = 5f;
-        public float moveSpeed = 5f;
+        [SerializeField] private float _jumpForce = 5f;
+        [SerializeField] private float _moveSpeed = 5f;
 
         [Header("Mouse")]
-        public float sensitivity = 0.5f;
-        public float smoothing = 2f;
+        [SerializeField] private float _sensitivity = 0.5f;
+        [SerializeField] private float _smoothing = 2f;
 
+        private PlayerInputHandler _playerInputHandler;
         private CharacterController _controller;
 
         private Vector2 _mouseLook;
@@ -26,19 +26,21 @@ namespace Player {
         private void Awake() {
             _controller = GetComponent<CharacterController>();
             _controller.enableOverlapRecovery = true;
+            
+            _playerInputHandler = GetComponent<PlayerInputHandler>();
         }
 
         private void OnEnable() {
             if (IsSpawned && IsOwner)
-                inputHandler.Enable();
+                _playerInputHandler.Enable();
         }
 
         private void OnDisable() {
-            inputHandler.Disable();
+            _playerInputHandler.Disable();
         }
     
         public override void OnNetworkDespawn() {
-            inputHandler.Disable();
+            _playerInputHandler.Disable();
         }
 
         private void Start () {
@@ -47,27 +49,27 @@ namespace Player {
 
         public override void OnNetworkSpawn() {
             if (IsOwner) {
-                inputHandler.Enable();
+                _playerInputHandler.Enable();
                 
-                if (cameraTransform == null) {
+                if (_cameraTransform == null) {
                     return;
                 }
             
-                var cam = cameraTransform.GetComponent<Camera>();
+                var cam = _cameraTransform.GetComponent<Camera>();
                 if(cam) cam.enabled = true;
-                var listener = cameraTransform.GetComponent<AudioListener>();
+                var listener = _cameraTransform.GetComponent<AudioListener>();
 
                 if (listener) {
                     listener.enabled = true;
                 }
             } else {
-                if(cameraTransform != null) {
-                    var cam = cameraTransform.GetComponent<Camera>();
+                if(_cameraTransform != null) {
+                    var cam = _cameraTransform.GetComponent<Camera>();
                     if(cam) cam.enabled = false;
-                    var listener = cameraTransform.GetComponent<AudioListener>();
+                    var listener = _cameraTransform.GetComponent<AudioListener>();
                     if(listener) listener.enabled = false;
                 }
-                inputHandler.Disable();
+                _playerInputHandler.Disable();
             }
         }
 
@@ -81,21 +83,21 @@ namespace Player {
         }
 
         private void HandleLook() {
-            Vector2 lookInput = inputHandler.GetLookInput();
-            var md = Vector2.Scale(lookInput, new Vector2(sensitivity * smoothing, sensitivity * smoothing));
+            Vector2 lookInput = _playerInputHandler.GetLookInput();
+            var md = Vector2.Scale(lookInput, new Vector2(_sensitivity * _smoothing, _sensitivity * _smoothing));
             
-            _smoothY.x = Mathf.Lerp(_smoothY.x, md.x, 1f / smoothing);
-            _smoothY.y = Mathf.Lerp(_smoothY.y, md.y, 1f / smoothing);
+            _smoothY.x = Mathf.Lerp(_smoothY.x, md.x, 1f / _smoothing);
+            _smoothY.y = Mathf.Lerp(_smoothY.y, md.y, 1f / _smoothing);
             _mouseLook += _smoothY;
             _mouseLook.y = Mathf.Clamp(_mouseLook.y, -90f, 90f);
 
-            cameraTransform.localRotation = Quaternion.AngleAxis(-_mouseLook.y, Vector3.right);
+            _cameraTransform.localRotation = Quaternion.AngleAxis(-_mouseLook.y, Vector3.right);
             transform.localRotation = Quaternion.AngleAxis(_mouseLook.x, transform.up);
         }
 
         private void HandleMovement() {
-            Vector3 moveInput = inputHandler.GetMoveInput();
-            Vector3 targetVelocity = transform.right * (moveInput.x * moveSpeed) + transform.forward * (moveInput.z * moveSpeed);
+            Vector3 moveInput = _playerInputHandler.GetMoveInput();
+            Vector3 targetVelocity = transform.right * (moveInput.x * _moveSpeed) + transform.forward * (moveInput.z * _moveSpeed);
             
             _velocity = Vector3.Lerp(_velocity, targetVelocity, 5f * Time.deltaTime);
             
@@ -105,6 +107,14 @@ namespace Player {
         private void Jump() {
             if (!IsOwner) return;
             Debug.Log("Jump!");
+        }
+
+        private void HandlePause(bool isPaused) {
+            if (isPaused) {
+                _playerInputHandler.DisableGameplay();
+            } else {
+                _playerInputHandler.EnableGameplay();
+            }
         }
     }
 }

@@ -5,27 +5,27 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace UserInterface {
-    public class MainMenuUI : MonoBehaviour {
-        [SerializeField] private Button hostButton;
-        [SerializeField] private Button clientButton;
-        [SerializeField] private TMP_InputField joinCodeInput;
-        [SerializeField] private TextMeshProUGUI codeDisplay;
+    public class MainMenu : MonoBehaviour {
+        [SerializeField] private Button _hostButton;
+        [SerializeField] private Button _clientButton;
+        [SerializeField] private TMP_InputField _joinCodeInput;
+        [SerializeField] private TextMeshProUGUI _codeDisplay;
 
         private string _joinCode;
 
         private void Start() {
-            hostButton.onClick.AddListener(async () => {
+            _hostButton.onClick.AddListener(async () => {
                 string joinCode = await RelayManager.CreateRelay();
                 if (joinCode == null) return;
                 
                 NetworkManager.Singleton.StartHost();
 
-                codeDisplay.text = $"Code: {joinCode}";
+                _codeDisplay.text = $"Code: {joinCode}";
                 HideButtons();
             });
 
-            clientButton.onClick.AddListener(async () => {
-                string codeToJoin = joinCodeInput.text;
+            _clientButton.onClick.AddListener(async () => {
+                string codeToJoin = _joinCodeInput.text;
 
                 if (string.IsNullOrEmpty(codeToJoin)) {
                     Debug.LogWarning("Please enter a join code!");
@@ -41,9 +41,9 @@ namespace UserInterface {
 
         private void HideButtons() {
             //gameObject.SetActive(false);
-            hostButton.gameObject.SetActive(false);
-            clientButton.gameObject.SetActive(false);
-            joinCodeInput.gameObject.SetActive(false);
+            _hostButton.gameObject.SetActive(false);
+            _clientButton.gameObject.SetActive(false);
+            _joinCodeInput.gameObject.SetActive(false);
         }
     }
 }

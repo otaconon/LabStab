@@ -1106,7 +1106,7 @@ Transform:
   m_GameObject: {fileID: 2568629407161108614}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6, z: 0}
+  m_LocalPosition: {x: 0, y: 5.38, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1442,6 +1442,7 @@ GameObject:
   - component: {fileID: 5842989361147930796}
   - component: {fileID: 6347162031869633977}
   - component: {fileID: 7765366857849858005}
+  - component: {fileID: 3464115028502838280}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1480,7 +1481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3550566753
+  GlobalObjectIdHash: 3255438136
   InScenePlacedSourceGlobalObjectIdHash: 2679581884
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1506,12 +1507,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   ShowTopMostFoldoutHeaderGroup: 1
-  cameraTransform: {fileID: 6351385385466758027}
-  inputHandler: {fileID: 8062651866717974494}
-  jumpForce: 5
-  moveSpeed: 5
-  sensitivity: 0.05
-  smoothing: 2
+  _cameraTransform: {fileID: 6351385385466758027}
+  _jumpForce: 5
+  _moveSpeed: 5
+  _sensitivity: 0.05
+  _smoothing: 2
 --- !u!143 &6347162031869633977
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1583,6 +1583,18 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &3464115028502838280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797931875154880687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a099c6dda85bd3041a9ec0932af5ca53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Input.PlayerInputHandler
 --- !u!1 &4446859729002512435
 GameObject:
   m_ObjectHideFlags: 0
