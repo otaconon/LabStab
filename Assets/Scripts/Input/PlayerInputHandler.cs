@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Input {
     public class PlayerInputHandler : MonoBehaviour {
@@ -43,6 +45,10 @@ namespace Input {
                 return Vector2.zero;
 
             return _playerActions.Gameplay.Look.ReadValue<Vector2>();
+        }
+
+        public bool GetJumpInput() {
+            return _playerActions.Gameplay.Jump.WasPressedThisFrame();
         }
     }
 }
