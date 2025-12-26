@@ -1403,8 +1403,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 79.43758, y: 0, z: 156.02}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6351385385466758027}
   - {fileID: 1622634936036719381}
@@ -1511,10 +1511,12 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _cameraTransform: {fileID: 6351385385466758027}
   _moveSpeed: 20
-  _jumpStrength: 100
-  _gravity: 200
-  _sensitivity: 0.05
-  _smoothing: 2
+  _groundAcceleration: 20
+  _jumpStrength: 9
+  _gravity: 20
+  _airAcceleration: 20
+  _mouseSensitivity: 0.05
+  _mouseSmoothing: 2
 --- !u!143 &7858569819653001287
 CharacterController:
   m_ObjectHideFlags: 0

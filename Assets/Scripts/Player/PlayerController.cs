@@ -10,12 +10,14 @@ namespace Player {
 
         [Header("Movement")]
         [SerializeField] private float _moveSpeed = 5f;
+        [SerializeField] private float _groundAcceleration = 5f;
         [SerializeField] private float _jumpStrength = 5f;
         [SerializeField] private float _gravity = 5f;
+        [SerializeField] private float _airAcceleration = 20f;
 
         [Header("Mouse")]
-        [SerializeField] private float _sensitivity = 0.5f;
-        [SerializeField] private float _smoothing = 2f;
+        [SerializeField] private float _mouseSensitivity = 0.5f;
+        [SerializeField] private float _mouseSmoothing = 2f;
 
         private PlayerInputHandler _playerInputHandler;
         private CharacterController _controller;
@@ -87,10 +89,10 @@ namespace Player {
 
         private void HandleLook() {
             Vector2 lookInput = _playerInputHandler.GetLookInput();
-            var md = Vector2.Scale(lookInput, new Vector2(_sensitivity * _smoothing, _sensitivity * _smoothing));
+            var md = Vector2.Scale(lookInput, new Vector2(_mouseSensitivity * _mouseSmoothing, _mouseSensitivity * _mouseSmoothing));
 
-            _smoothY.x = Mathf.Lerp(_smoothY.x, md.x, 1f / _smoothing);
-            _smoothY.y = Mathf.Lerp(_smoothY.y, md.y, 1f / _smoothing);
+            _smoothY.x = Mathf.Lerp(_smoothY.x, md.x, 1f / _mouseSmoothing);
+            _smoothY.y = Mathf.Lerp(_smoothY.y, md.y, 1f / _mouseSmoothing);
             _mouseLook += _smoothY;
             _mouseLook.y = Mathf.Clamp(_mouseLook.y, -90f, 90f);
 
@@ -99,15 +101,19 @@ namespace Player {
         }
 
         private void HandleMovement() {
-            Vector3 moveInput = _playerInputHandler.GetMoveInput();
-            Vector3 targetVelocity = transform.TransformVector(moveInput) * _moveSpeed;
+            Vector3 moveDirection = transform.TransformVector(_playerInputHandler.GetMoveInput());
 
-            _velocity = Vector3.Lerp(_velocity, targetVelocity, 5f * Time.deltaTime);
-            
-            if (_controller.isGrounded && _playerInputHandler.GetJumpInput()) {
-                _velocity.y = _jumpStrength; 
+            if (_controller.isGrounded) {
+                Vector3 targetVelocity = moveDirection * _moveSpeed;
+                _velocity = Vector3.Lerp(_velocity, targetVelocity, _groundAcceleration * Time.deltaTime);
+                
+                if (_playerInputHandler.GetJumpInput()) {
+                    _velocity.y = 0;
+                    _velocity += transform.up * _jumpStrength;
+                }
             } else {
-                _velocity.y -= _gravity * Time.deltaTime;
+                _velocity += moveDirection * (_airAcceleration * Time.deltaTime);
+                _velocity += -transform.up * (_gravity * Time.deltaTime);
             }
 
             _controller.Move(_velocity * Time.deltaTime);
