@@ -7,6 +7,7 @@ namespace Player {
     public class PlayerController : NetworkBehaviour {
         [Header("References")]
         [SerializeField] private Transform _cameraTransform;
+        [SerializeField] private Animator _playerAnimator;
 
         [Header("Movement")]
         [SerializeField] private float _moveSpeed = 5f;
@@ -85,6 +86,7 @@ namespace Player {
 
             HandleMovement();
             HandleLook();
+            HandleCombat();
         }
 
         private void HandleLook() {
@@ -117,6 +119,13 @@ namespace Player {
             }
 
             _controller.Move(_velocity * Time.deltaTime);
+        }
+
+        private void HandleCombat() {
+            if (_playerInputHandler.GetAttackInput()) {
+                Debug.Log("Input: Attack");
+                _playerAnimator.SetTrigger("Attack");
+            }
         }
     }
 }

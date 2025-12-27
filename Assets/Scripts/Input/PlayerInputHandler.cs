@@ -50,5 +50,9 @@ namespace Input {
         public bool GetJumpInput() {
             return _playerActions.Gameplay.Jump.WasPressedThisFrame();
         }
+
+        public bool GetAttackInput() {
+            return _playerActions.Gameplay.Attack.WasPressedThisFrame();
+        }
     }
 }
