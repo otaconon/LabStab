@@ -14,7 +14,12 @@ namespace Editor {
             
             if (GUILayout.Button("Render Maze Mesh"))
             {
+                var meshComponent = mazeRenderer.GetComponent<MazeMesh>();
+                Undo.RecordObject(meshComponent, "Generate Maze");
+
                 mazeRenderer.RenderMaze();
+
+                EditorUtility.SetDirty(meshComponent);
             }
         }
     }

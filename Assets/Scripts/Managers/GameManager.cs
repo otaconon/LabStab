@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Input;
 using Networking;
+using Player;
 using Unity.Netcode;
 using UnityEngine;
 using UserInterface;
@@ -8,16 +10,24 @@ using UserInterface;
 namespace Managers {
     public class GameManager : MonoBehaviour {
         public static GameManager Instance { get; private set; }
-    
+
         public event Action<bool> PauseStateChanged;
         public event Action GameStarted;
         public event Action PlayerLeft;
 
+        public List<GameObject> Players { get; private set; }
+
         private bool _isPaused = false;
+
 
         private void Awake() {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+            Instance.Players = new List<GameObject>();
+        }
+
+        public void AddPlayer(GameObject playerObj) {
+            Players.Add(playerObj);
         }
 
 
