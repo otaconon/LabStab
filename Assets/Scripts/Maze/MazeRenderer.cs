@@ -38,6 +38,9 @@ namespace Maze {
 
             var importer = (TextureImporter)AssetImporter.GetAtPath(_textureSavePath);
             if (importer != null) {
+                importer.npotScale = TextureImporterNPOTScale.None; 
+                importer.mipmapEnabled = false; 
+                importer.sRGBTexture = false;
                 importer.isReadable = true;
                 importer.filterMode = FilterMode.Point;
                 importer.textureCompression = TextureImporterCompression.Uncompressed;
