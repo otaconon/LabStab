@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,7 +6,7 @@ namespace Input {
     public class SystemInputHandler : MonoBehaviour {
         public static SystemInputHandler Instance { get; private set; }
 
-        public event System.Action OnPausePressed;
+        public event Action PausePressed;
 
         private PlayerActions _actions;
 
@@ -30,7 +31,7 @@ namespace Input {
         }
 
         private void HandlePause(InputAction.CallbackContext ctx) {
-            OnPausePressed?.Invoke();
+            PausePressed?.Invoke();
         }
     }
 }

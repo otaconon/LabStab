@@ -5,15 +5,15 @@ namespace CameraControllers {
     public class MenuCamera : MonoBehaviour
     {
         private void Start() {
-            GameManager.Instance.OnGameStarted += OnGameStarted;
-            GameManager.Instance.OnGameLeft += OnGameLeft;
+            GameManager.Instance.GameStarted += OnGameStarted;
+            GameManager.Instance.PlayerLeft += OnPlayerLeft;
         }
 
         private void OnGameStarted() {
             gameObject.SetActive(false);
         }
 
-        private void OnGameLeft() {
+        private void OnPlayerLeft() {
             gameObject.SetActive(true);
         }
     }

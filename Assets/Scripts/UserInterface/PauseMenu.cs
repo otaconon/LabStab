@@ -12,7 +12,7 @@ namespace UserInterface {
             _resumeButton.onClick.AddListener(Resume);
             _leaveButton.onClick.AddListener(Leave);
             
-            GameManager.Instance.OnPauseStateChanged += OnPause;
+            GameManager.Instance.PauseStateChanged += Pause;
             gameObject.SetActive(false);
         }
 
@@ -26,7 +26,7 @@ namespace UserInterface {
             GameManager.Instance.LeaveGame();
         }
 
-        private void OnPause(bool isPaused) {
+        private void Pause(bool isPaused) {
             gameObject.SetActive(isPaused);
         }
     }

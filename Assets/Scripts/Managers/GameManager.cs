@@ -9,9 +9,9 @@ namespace Managers {
     public class GameManager : MonoBehaviour {
         public static GameManager Instance { get; private set; }
     
-        public event Action<bool> OnPauseStateChanged;
-        public event Action OnGameStarted;
-        public event Action OnGameLeft;
+        public event Action<bool> PauseStateChanged;
+        public event Action GameStarted;
+        public event Action PlayerLeft;
 
         private bool _isPaused = false;
 
@@ -48,18 +48,18 @@ namespace Managers {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             
-            SystemInputHandler.Instance.OnPausePressed -= TogglePause;
+            SystemInputHandler.Instance.PausePressed -= TogglePause;
             
-            OnGameLeft?.Invoke();
+            PlayerLeft?.Invoke();
         }
 
         private void StartGame() {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             
-            SystemInputHandler.Instance.OnPausePressed += TogglePause;
+            SystemInputHandler.Instance.PausePressed += TogglePause;
             
-            OnGameStarted?.Invoke();
+            GameStarted?.Invoke();
         }
 
         public void TogglePause() {
@@ -75,7 +75,7 @@ namespace Managers {
                 Cursor.visible = false;
             }
 
-            OnPauseStateChanged?.Invoke(_isPaused);
+            PauseStateChanged?.Invoke(_isPaused);
         }
     }
 }

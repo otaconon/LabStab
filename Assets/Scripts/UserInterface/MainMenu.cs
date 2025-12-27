@@ -13,8 +13,8 @@ namespace UserInterface {
         private string _joinCode;
 
         private void Start() {
-            GameManager.Instance.OnGameStarted += () => gameObject.SetActive(false);
-            GameManager.Instance.OnGameLeft += () => gameObject.SetActive(true);
+            GameManager.Instance.GameStarted += () => gameObject.SetActive(false);
+            GameManager.Instance.PlayerLeft += () => gameObject.SetActive(true);
 
             _hostButton.onClick.AddListener(HostGame);
             _clientButton.onClick.AddListener(JoinGame);
