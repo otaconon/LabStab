@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Combat {
     [System.Serializable]
     [RequireComponent(typeof(Collider))]
-    public class MeleeWeaponBase : WeaponBase {
+    public class MeleeWeapon : WeaponBase {
         [SerializeField] protected int _damage = 1;
 
         private Collider _hitbox;

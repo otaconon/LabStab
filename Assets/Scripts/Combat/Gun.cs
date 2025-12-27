@@ -6,7 +6,7 @@ namespace Combat {
     public class Gun : WeaponBase {
         [SerializeField] private Transform _originTransform;
         [SerializeField] private float _range = 50f;
-        [SerializeField] private int _damage = 0;
+        [SerializeField] private int _damage = 1;
 
         public override void OnAttackStart() {
         }
@@ -19,8 +19,7 @@ namespace Combat {
         }
 
         public void Shoot() {
-            RaycastHit hit;
-            if (!Physics.Raycast(_originTransform.position, _originTransform.forward, out hit, _range)) {
+            if (!Physics.Raycast(_originTransform.position, _originTransform.forward, out RaycastHit hit, _range)) {
                 return;
             }
 

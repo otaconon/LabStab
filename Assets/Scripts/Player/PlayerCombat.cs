@@ -20,6 +20,7 @@ namespace Player {
 
         public void TakeDamage(int damage) {
             _health -= damage;
+            Debug.Log("Damage taken, remaining hp: " + _health);
             if (_health <= 0) {
                 HandleDeath(); 
             }

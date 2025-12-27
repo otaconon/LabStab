@@ -10,6 +10,8 @@ using UnityEngine;
 
 namespace Networking {
     public class RelayManager : MonoBehaviour {
+        public static event Action<string> JoinedRelay;
+        
         private async void Start() {
             try {
                 await UnityServices.InitializeAsync();
@@ -34,6 +36,7 @@ namespace Networking {
                     allocation.ToRelayServerData("dtls")
                 );
 
+                JoinedRelay?.Invoke(joinCode);
                 return joinCode;
             }
             catch (RelayServiceException e) {
@@ -45,13 +48,15 @@ namespace Networking {
         public static async Task<bool> JoinRelay(string joinCode) {
             try {
                 Debug.Log($"Joining Relay with code: {joinCode}");
-
+                
                 JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 
                 NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(
                     joinAllocation.ToRelayServerData("dtls")
                 );
-
+                
+                JoinedRelay?.Invoke(joinCode);
+                
                 return true;
             }
             catch (RelayServiceException e) {
